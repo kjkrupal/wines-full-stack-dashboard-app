@@ -6,7 +6,7 @@ plugins {
 
 group = 'com.kubeio.analysis'
 version = '0.0.1-SNAPSHOT'
-sourceCompatibility = '17'
+sourceCompatibility = '11'
 
 repositories {
 	mavenCentral()
@@ -15,6 +15,7 @@ repositories {
 dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
+	implementation 'org.postgresql:postgresql:42.2.23'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 }
 
