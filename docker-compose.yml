@@ -16,14 +16,34 @@ services:
     networks:
       - kubeio-network
 
-  kubeio-api-server:
-    container_name: kubeio-api-server
-    build: .
-    image: kubeio-api-server:latest
+  kubeio-redis:
+    container_name: kubeio-redis
+    image: redis:alpine
+    ports:
+      - 6379:6379
+    networks:
+      - kubeio-network
+
+  kubeio-search-server:
+    container_name: kubeio-search-server
+    build: ./kubeio-searchservice/
+    image: kubeio-search-server:latest
     depends_on:
       - kubeio-db
     ports:
       - 8080:8080
+    networks:
+      - kubeio-network
+
+  kubeio-wines-server:
+    container_name: kubeio-wines-server
+    build: ./kubeio-wineservice/
+    image: kubeio-wines-server:latest
+    depends_on:
+      - kubeio-db
+      - kubeio-redis
+    ports:
+      - 8081:8080
     networks:
       - kubeio-network
 
