@@ -4,6 +4,9 @@ import com.kubeio.wines.exceptions.RecordNotFoundException;
 import com.kubeio.wines.models.Wine;
 import com.kubeio.wines.repository.WineRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -17,6 +20,7 @@ public class WineService {
     @Autowired
     WineRepository wineRepository;
 
+    @Cacheable(value = "Wine")
     public List<Wine> fetchAllWines() {
         List<Wine> wines = wineRepository.findAll();
         if(wines.size() > 0) {
@@ -25,6 +29,7 @@ public class WineService {
         return new ArrayList<Wine>();
     }
 
+    @Cacheable(value = "Wine", key = "#id")
     public Wine fetchWineById(Long id) throws RecordNotFoundException {
         Optional<Wine> wine = wineRepository.findById(id);
         if(wine.isPresent()) {
@@ -41,6 +46,7 @@ public class WineService {
         return wine;
     }
 
+    @CachePut(value = "Wine", key = "#id")
     public Wine updateWine(Long id, Wine newWine) throws RecordNotFoundException {
         Optional<Wine> wineRecord = wineRepository.findById(id);
 
@@ -62,6 +68,7 @@ public class WineService {
         }
     }
 
+    @CacheEvict(value = "Wine", key = "#id")
     public void deleteWineById(Long id) throws RecordNotFoundException {
         Optional<Wine> wine = wineRepository.findById(id);
 

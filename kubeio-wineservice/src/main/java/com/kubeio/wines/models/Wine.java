@@ -1,17 +1,19 @@
 package com.kubeio.wines.models;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.UUID;
 
 @Entity
 @Table(name = "WINES")
 @Getter @Setter @NoArgsConstructor
-public class Wine {
+public class Wine implements Serializable {
+
+    private static final long serialVersionUID = -4439114469417994311L;
 
     @Id
     @GeneratedValue
