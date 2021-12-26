@@ -3,7 +3,7 @@ package com.kubeio.wines.controllers;
 import com.kubeio.wines.exceptions.RecordNotFoundException;
 import com.kubeio.wines.models.Wine;
 import com.kubeio.wines.services.WineService;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,8 +15,10 @@ import java.util.List;
 @RequestMapping("/wines")
 public class WineController {
 
-    @Autowired
-    WineService wineService;
+    final WineService wineService;
+    public WineController(WineService wineService, RabbitTemplate rabbitTemplate) {
+        this.wineService = wineService;
+    }
 
     @GetMapping
     public ResponseEntity<List<Wine>> fetchAllWines() {
