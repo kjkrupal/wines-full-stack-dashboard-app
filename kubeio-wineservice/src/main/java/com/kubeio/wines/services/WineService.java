@@ -1,9 +1,10 @@
 package com.kubeio.wines.services;
 
+import com.kubeio.wines.dto.WineEvent;
 import com.kubeio.wines.exceptions.RecordNotFoundException;
 import com.kubeio.wines.models.Wine;
+import com.kubeio.wines.publishers.WinePublisher;
 import com.kubeio.wines.repository.WineRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
@@ -17,8 +18,13 @@ import java.util.UUID;
 @Service
 public class WineService {
 
-    @Autowired
-    WineRepository wineRepository;
+    private final WineRepository wineRepository;
+    private final WinePublisher winePublisher;
+
+    public WineService(WineRepository wineRepository, WinePublisher winePublisher) {
+        this.wineRepository = wineRepository;
+        this.winePublisher = winePublisher;
+    }
 
     @Cacheable(value = "Wine")
     public List<Wine> fetchAllWines() {
@@ -43,6 +49,7 @@ public class WineService {
     public Wine createWine(Wine wine) {
         wine.setUuid(UUID.randomUUID());
         wineRepository.save(wine);
+        winePublisher.publishWineEvent(wine, WineEvent.CREATE);
         return wine;
     }
 
@@ -60,7 +67,7 @@ public class WineService {
             wine.setVariety(newWine.getVariety());
 
             wine = wineRepository.save(wine);
-
+            winePublisher.publishWineEvent(wine, WineEvent.UPDATE);
             return wine;
         }
         else {
@@ -74,9 +81,11 @@ public class WineService {
 
         if(wine.isPresent()) {
             wineRepository.deleteById(id);
+            winePublisher.publishWineEvent(wine.get(), WineEvent.DELETE);
         }
         else {
             throw new RecordNotFoundException("Wine record with id " + id + " does not exist.");
         }
     }
+
 }
