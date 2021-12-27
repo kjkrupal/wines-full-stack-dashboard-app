@@ -2,7 +2,6 @@ package com.kubeio.wines.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.ToString;
 
 import java.util.UUID;
 
