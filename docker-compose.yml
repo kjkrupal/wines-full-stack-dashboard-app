@@ -16,6 +16,20 @@ services:
     networks:
       - kubeio-network
 
+  kubeio-elasticsearch:
+    container_name: kubeio-elasticsearch
+    image: elasticsearch:7.16.2
+    environment:
+      - ES_JAVA_OPTS=-Xms2g -Xmx2g
+      - bootstrap.memory_lock=true
+      - discovery.type=single-node
+    ports:
+      - 9200:9200
+    volumes:
+      - kubeio-elasticsearch:/usr/share/elasticsearch/data
+    networks:
+      - kubeio-network
+
   kubeio-event-bus:
     container_name: kubeio-event-bus
     image: rabbitmq:3-management-alpine
@@ -42,11 +56,13 @@ services:
     image: kubeio-search-server:latest
     depends_on:
       - kubeio-db
+      - kubeio-elasticsearch
       - kubeio-event-bus
     ports:
       - 8080:8080
     networks:
       - kubeio-network
+    restart: on-failure
 
   kubeio-wines-server:
     container_name: kubeio-wines-server
@@ -60,9 +76,11 @@ services:
       - 8081:8080
     networks:
       - kubeio-network
+    restart: on-failure
 
 volumes:
   kubeio-db:
+  kubeio-elasticsearch:
 
 networks:
   kubeio-network:
