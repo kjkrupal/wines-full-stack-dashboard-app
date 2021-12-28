@@ -10,8 +10,6 @@ import org.springframework.data.elasticsearch.annotations.Document;
 import org.springframework.data.elasticsearch.annotations.Field;
 import org.springframework.data.elasticsearch.annotations.FieldType;
 
-import java.util.UUID;
-
 @Data
 @Builder
 @AllArgsConstructor
@@ -47,5 +45,4 @@ public class Wine {
                 wineDTO.getVariety(),
                 wineDTO.getWinery());
     }
-
 }

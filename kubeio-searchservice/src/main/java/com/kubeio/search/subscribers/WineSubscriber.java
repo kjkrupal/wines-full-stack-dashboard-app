@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 @Slf4j
 public class WineSubscriber {
 
-    private WineService wineService;
+    private final WineService wineService;
 
     public WineSubscriber(WineService wineService) {
         this.wineService = wineService;
