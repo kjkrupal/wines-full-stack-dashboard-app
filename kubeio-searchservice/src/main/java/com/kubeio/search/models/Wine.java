@@ -20,7 +20,6 @@ import java.util.UUID;
 public class Wine {
 
     @Id
-    @Field(type = FieldType.Text, name = "uuid")
     private String uuid;
 
     @Field(type = FieldType.Text, name = "country")

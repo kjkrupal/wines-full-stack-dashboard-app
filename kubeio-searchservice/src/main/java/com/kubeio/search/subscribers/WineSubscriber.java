@@ -19,13 +19,13 @@ public class WineSubscriber {
     @RabbitListener(queues = "${create.queue.name}")
     public void onWineCreateEvent(WineDTO wine) {
         log.info("Received wine create event. {}", wine);
-        wineService.createWineIndex(wine);
+        wineService.createOrUpdateWineIndex(wine);
     }
 
     @RabbitListener(queues = "${update.queue.name}")
     public void onWineUpdateEvent(WineDTO wine) {
         log.info("Received wine update event. {}", wine);
-        wineService.updateWineIndex(wine);
+        wineService.createOrUpdateWineIndex(wine);
     }
 
     @RabbitListener(queues = "${delete.queue.name}")

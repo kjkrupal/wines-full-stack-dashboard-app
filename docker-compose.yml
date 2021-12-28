@@ -62,6 +62,7 @@ services:
       - 8080:8080
     networks:
       - kubeio-network
+    restart: on-failure
 
   kubeio-wines-server:
     container_name: kubeio-wines-server
@@ -75,6 +76,7 @@ services:
       - 8081:8080
     networks:
       - kubeio-network
+    restart: on-failure
 
 volumes:
   kubeio-db:
