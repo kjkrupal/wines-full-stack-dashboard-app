@@ -26,11 +26,14 @@ hs_err_pid*
 .idea/
 kubeio-wineservice/.idea/
 kubeio-searchservice/.idea/
+kubeio-discovery/.idea/
 
 # Gradle files
 kubeio-searchservice/.gradle/
 kubeio-wineservice/.gradle/
+kubeio-discovery/.gradle/
 
 # Build
 kubeio-searchservice/build/
 kubeio-wineservice/build/
+kubeio-discovery/build/

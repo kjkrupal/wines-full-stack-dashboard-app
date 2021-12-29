@@ -50,16 +50,12 @@ services:
     networks:
       - kubeio-network
 
-  kubeio-search-server:
-    container_name: kubeio-search-server
-    build: ./kubeio-searchservice/
-    image: kubeio-search-server:latest
-    depends_on:
-      - kubeio-db
-      - kubeio-elasticsearch
-      - kubeio-event-bus
+  kubeio-discovery:
+    container_name: kubeio-discovery
+    build: ./kubeio-discovery/
+    image: kubeio-discovery:latest
     ports:
-      - 8080:8080
+      - 8761:8761
     networks:
       - kubeio-network
     restart: on-failure
@@ -72,6 +68,22 @@ services:
       - kubeio-db
       - kubeio-redis
       - kubeio-event-bus
+      - kubeio-discovery
+    ports:
+      - 8080:8080
+    networks:
+      - kubeio-network
+    restart: on-failure
+
+  kubeio-search-server:
+    container_name: kubeio-search-server
+    build: ./kubeio-searchservice/
+    image: kubeio-search-server:latest
+    depends_on:
+      - kubeio-db
+      - kubeio-elasticsearch
+      - kubeio-event-bus
+      - kubeio-discovery
     ports:
       - 8081:8080
     networks:
