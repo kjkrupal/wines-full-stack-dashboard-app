@@ -1,0 +1,34 @@
+server:
+  port: 8082
+
+spring:
+  application:
+    name: kubeio-gateway
+  cloud:
+    gateway:
+      routes:
+        - id: kubeio-wines-service
+          uri: lb://kubeio-wines-service
+          predicates:
+            - Path=/wines-svc/**
+          filters:
+            - StripPrefix=1
+        - id: kubeio-search-service
+          uri: lb://kubeio-search-service
+          predicates:
+            - Path=/search-svc/**
+          filters:
+            - StripPrefix=1
+        - id: kubeio-discovery
+          uri: lb://kubeio-discovery
+          predicates:
+            - Path=/discovery/**
+
+
+eureka:
+  client:
+    registerWithEureka: true
+    serviceUrl:
+      defaultZone: http://kubeio-discovery:8761/eureka
+    healthcheck:
+      enabled: true
