@@ -1,16 +1,15 @@
 package com.kubeio.search.controller;
 
+import com.fasterxml.jackson.databind.introspect.TypeResolutionContext;
 import com.kubeio.search.models.Wine;
 import com.kubeio.search.services.WineService;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/search")
@@ -26,5 +25,10 @@ public class SearchController {
     public ResponseEntity<List<Wine>> searchWineByField(@RequestParam("q") String query) {
         List<Wine> wines = wineService.findWinesForQuery(query);
         return new ResponseEntity<List<Wine>>(wines, new HttpHeaders(), HttpStatus.OK);
+    }
+
+    @PostMapping("/refresh")
+    public ResponseEntity searchByField(@RequestBody Optional<Wine> wine) {
+        return new ResponseEntity(HttpStatus.NO_CONTENT);
     }
 }
