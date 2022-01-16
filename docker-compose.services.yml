@@ -1,0 +1,37 @@
+version: '3.1'
+
+services:
+  kubeio-gateway:
+    container_name: kubeio-gateway
+    build: ./kubeio-gateway/
+    image: kubeio-gateway:latest
+    ports:
+      - 8080:8080
+    networks:
+      - kubeio-network
+    restart: on-failure
+
+  kubeio-wines-server:
+    container_name: kubeio-wines-server
+    build: ./kubeio-wineservice/
+    image: kubeio-wines-server:latest
+    ports:
+      - 8081:8081
+    networks:
+      - kubeio-network
+    restart: on-failure
+
+  kubeio-search-server:
+    container_name: kubeio-search-server
+    build: ./kubeio-searchservice/
+    image: kubeio-search-server:latest
+    ports:
+      - 8082:8082
+    networks:
+      - kubeio-network
+    restart: on-failure
+
+networks:
+  kubeio-network:
+    external:
+      name: kubeio-network
