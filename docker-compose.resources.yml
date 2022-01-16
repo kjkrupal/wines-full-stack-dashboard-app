@@ -60,36 +60,6 @@ services:
       - kubeio-network
     restart: on-failure
 
-  kubeio-wines-server:
-    container_name: kubeio-wines-server
-    build: ./kubeio-wineservice/
-    image: kubeio-wines-server:latest
-    depends_on:
-      - kubeio-db
-      - kubeio-redis
-      - kubeio-event-bus
-      - kubeio-discovery
-    ports:
-      - 8080:8080
-    networks:
-      - kubeio-network
-    restart: on-failure
-
-  kubeio-search-server:
-    container_name: kubeio-search-server
-    build: ./kubeio-searchservice/
-    image: kubeio-search-server:latest
-    depends_on:
-      - kubeio-db
-      - kubeio-elasticsearch
-      - kubeio-event-bus
-      - kubeio-discovery
-    ports:
-      - 8081:8080
-    networks:
-      - kubeio-network
-    restart: on-failure
-
 volumes:
   kubeio-db:
   kubeio-elasticsearch:
