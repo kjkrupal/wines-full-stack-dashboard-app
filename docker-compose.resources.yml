@@ -66,4 +66,5 @@ volumes:
 
 networks:
   kubeio-network:
+    name: kubeio-network
     driver: bridge
