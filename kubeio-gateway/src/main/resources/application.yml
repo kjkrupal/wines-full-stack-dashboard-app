@@ -23,7 +23,12 @@ spring:
           uri: lb://kubeio-discovery
           predicates:
             - Path=/discovery/**
-
+        - id: kubeio-authorization-service
+          uri: lb://kubeio-authorization-service
+          predicates:
+            - Path=/auth-svc/**
+          filters:
+            - StripPrefix=1
 
 eureka:
   client:

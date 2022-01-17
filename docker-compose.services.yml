@@ -31,6 +31,16 @@ services:
       - kubeio-network
     restart: on-failure
 
+  kubeio-authorization:
+    container_name: kubeio-auth
+    build: ./kubeio-auth/
+    image: kubeio-auth:latest
+    ports:
+      - 8083:8083
+    networks:
+      - kubeio-network
+    restart: on-failure
+
 networks:
   kubeio-network:
     external:
