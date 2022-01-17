@@ -8,6 +8,7 @@ import com.kubeio.wines.repository.WineRepository;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.Caching;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -18,6 +19,8 @@ import java.util.UUID;
 @Service
 public class WineService {
 
+    public static final String ALL_WINES_CACHE_KEY = "ALL_WINES_CACHE_KEY";
+
     private final WineRepository wineRepository;
     private final WinePublisher winePublisher;
 
@@ -26,7 +29,7 @@ public class WineService {
         this.winePublisher = winePublisher;
     }
 
-    @Cacheable(value = "Wine")
+    @Cacheable(value = "Wine", key = "#root.target.ALL_WINES_CACHE_KEY")
     public List<Wine> fetchAllWines() {
         List<Wine> wines = wineRepository.findAll();
         if(wines.size() > 0) {
@@ -46,6 +49,7 @@ public class WineService {
         }
     }
 
+    @CacheEvict(value = "Wine", key = "#root.target.ALL_WINES_CACHE_KEY")
     public Wine createWine(Wine wine) {
         wine.setUuid(UUID.randomUUID());
         wineRepository.save(wine);
@@ -53,7 +57,10 @@ public class WineService {
         return wine;
     }
 
-    @CachePut(value = "Wine", key = "#id")
+    @Caching(
+        put = {@CachePut(value = "Wine", key = "#id")},
+        evict = {@CacheEvict(value = "Wine", key = "#root.target.ALL_WINES_CACHE_KEY")}
+    )
     public Wine updateWine(Long id, Wine newWine) throws RecordNotFoundException {
         Optional<Wine> wineRecord = wineRepository.findById(id);
 
@@ -75,7 +82,10 @@ public class WineService {
         }
     }
 
-    @CacheEvict(value = "Wine", key = "#id")
+    @Caching(evict = {
+            @CacheEvict(value = "Wine", key = "#id"),
+            @CacheEvict(value = "Wine", key = "#root.target.ALL_WINES_CACHE_KEY")
+    })
     public void deleteWineById(Long id) throws RecordNotFoundException {
         Optional<Wine> wine = wineRepository.findById(id);
 
